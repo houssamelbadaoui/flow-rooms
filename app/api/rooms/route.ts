@@ -1,22 +1,6 @@
 import { z } from "zod";
 import { randomUUID } from "node:crypto";
-
-// define types
-type Player = {
-  id: string;
-  username: string;
-  joinedAt: string;
-};
-
-type Room = {
-  id: string;
-  name: string;
-  players: Player[];
-  maxPlayers: number;
-  createdAt: string;
-};
-
-const rooms = new Map<string, Room>(); // a temporary storage for created rooms
+import { rooms, type Player, type Room } from "@/lib/rooms/store";
 
 // define room schema
 const createRoomSchema = z.object({
