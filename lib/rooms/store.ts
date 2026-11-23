@@ -1,15 +1,4 @@
-export type Player = {
-  id: string;
-  username: string;
-  joinedAt: string;
-};
+import type { Player, Room } from "@/types/room";
 
-export type Room = {
-  id: string;
-  name: string;
-  players: Player[];
-  maxPlayers: number;
-  createdAt: string;
-};
-
+export type { Player, Room };
 export const rooms = new Map<string, Room>();
