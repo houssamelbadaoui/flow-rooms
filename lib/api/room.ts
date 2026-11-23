@@ -32,3 +32,23 @@ export async function createRoom(
 
   return result as CreateRoomResponse;
 }
+
+// leaving room function
+
+export async function leaveRoom(roomId: string, playerId: string) {
+  const response = await fetch(`/api/rooms/${roomId}/players/${playerId}`, {
+    method: "DELETE",
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      typeof result.error === "string"
+        ? result.error
+        : "Could not leave the room",
+    );
+  }
+
+  return result;
+}

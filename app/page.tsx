@@ -3,10 +3,14 @@
 import { useState } from "react";
 import CreateRoomForm from "@/components/createRoomForm";
 import type { Player, Room } from "@/types/room";
+import RoomView from "@/components/rooms/RoomView";
+import { leaveRoom } from "@/lib/api/room";
+import { buffer } from "stream/consumers";
 
 export default function Home() {
   const [room, setRoom] = useState<Room | null>(null);
   const [player, setPlayer] = useState<Player | null>(null);
+  const [leaveError, setLeaveError] = useState("");
 
   function handleRoomCreated(createdRoom: Room) {
     setRoom(createdRoom);
@@ -14,25 +18,36 @@ export default function Home() {
     setPlayer(createdRoom.players[0]);
   }
 
+  // handle leave room
+  async function handleLeaveRoom() {
+    if (!room || !player) return;
+
+    try {
+      setLeaveError("");
+
+      await leaveRoom(room.id, player.id);
+
+      setRoom(null);
+      setPlayer(null);
+    } catch (error) {
+      setLeaveError(
+        error instanceof Error ? error.message : "Could not leave room",
+      );
+    }
+  }
+
   // If the user is inside a room
   if (room && player) {
     return (
-      <main className="min-h-screen bg-zinc-950 text-white p-8">
-        <h1 className="text-3xl font-bold">{room.name}</h1>
+      <>
+        {leaveError && (
+          <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400">
+            {leaveError}
+          </div>
+        )}
 
-        <p className="mt-2 text-zinc-400">Room ID: {room.id}</p>
-
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold">Players</h2>
-
-          {room.players.map((roomPlayer) => (
-            <div key={roomPlayer.id} className="mt-3">
-              {roomPlayer.username}
-              {roomPlayer.id === player.id && " (You)"}
-            </div>
-          ))}
-        </div>
-      </main>
+        <RoomView room={room} player={player} onLeave={handleLeaveRoom} />
+      </>
     );
   }
 
