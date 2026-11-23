@@ -9,7 +9,7 @@ type CreateRoomFormProps = {
 };
 
 export default function CreateRoomForm({ onRoomCreated }: CreateRoomFormProps) {
-  const [userName, setUsername] = useState("");
+  const [username, setUsername] = useState("");
   const [roomName, setRoomName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -22,7 +22,7 @@ export default function CreateRoomForm({ onRoomCreated }: CreateRoomFormProps) {
 
     try {
       const result = await createRoom({
-        userName,
+        username,
         roomName,
       });
 
@@ -36,12 +36,12 @@ export default function CreateRoomForm({ onRoomCreated }: CreateRoomFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <div>
+      <div className="flex gap-3">
         <label htmlFor="username">Your username</label>
         <input
           type="text"
           id="username"
-          value={userName}
+          value={username}
           onChange={(event) => setUsername(event.target.value)}
           placeholder="Enter your username"
           minLength={2}
@@ -50,7 +50,7 @@ export default function CreateRoomForm({ onRoomCreated }: CreateRoomFormProps) {
         />
       </div>
 
-      <div>
+      <div className="flex gap-3">
         <label htmlFor="roomName">Room name</label>
         <input
           type="text"

@@ -1,7 +1,7 @@
 import type { Room } from "@/types/room";
 
 type CreateRoomInput = {
-  userName: string;
+  username: string;
   roomName: string;
 };
 
